@@ -1,0 +1,8 @@
+var game = new Phaser.Game(1000, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
+
+
+// Первый параметр - название нашего состояния 
+// Второй параметр - объект, который будет хранить методы нашего состояния 
+game.state.add('Menu', Menu); 
+
+game.state.start('Menu'); 

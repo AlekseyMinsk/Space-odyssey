@@ -1,0 +1,259 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+ul, li {
+	margin: 0;
+	padding: 0;
+}
+li {
+	list-style: none;
+}
+h1, h2,h3,h4 {
+	margin-top: 0;
+}
+a {
+	text-decoration: none;
+}
+canvas {
+	width: 1000px;
+	margin: 0 auto;
+	margin-top: 50px;
+}
+.container {
+ 	width: 970px;
+ 	margin: 0 auto;
+ }
+ .content {
+ 	min-height: calc(100vh - 70px);
+ }
+ .flex {
+ 	display: flex;
+ 	flex-direction: row;
+	justify-content: space-between;
+ }
+ .header {
+ 	padding-top: 200px;
+ 	text-align: center;
+ 	height: 400px;
+ 	background: #222 url(../assets/img/mainSpace.jpg) no-repeat center bottom;
+	-webkit-background-size: cover;
+	   -moz-background-size: cover;
+	     -o-background-size: cover;
+		    background-size: cover;
+ }
+.button {
+  color: white;
+  font-weight: 700;
+  display: block;
+  user-select: none;
+  padding: .5em 2em;
+  border: none;
+  outline: 0;
+  border: 2px solid;
+  border-radius: 5px;
+  transition: 0.2s;
+  background: red;
+  height: 60px;
+  width: 150px;
+  margin:0 auto;
+} 
+.button:hover { background: rgba(255,255,255,.2); }
+.hide {
+	display: none !important;
+}
+.nav {
+	width: 100%;
+	position: fixed;
+	top: 0px;
+	padding-top: 10px;
+	height: 70px;
+	background-color: rgba(0, 0, 0, 0.5); 
+}
+.head {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	color: #FFF;
+	height: 60px;
+}
+
+.head li {
+	font: 20px/45px  Arial, Arial, Helvetica, sans-serif;
+	
+	color: #FFF;
+
+	height: 50px;
+	width: 140px;
+	text-align: center;
+}
+.head li a {
+	color: #FFF;
+}
+.head li:hover {
+	background-color: rgba(0, 0, 0, 0.4);
+	border-radius: 10px;
+	border: 2px solid #FFF;
+	width: 136px;
+}
+h1{
+	font-size: 100px;
+	color: #FFF;
+	margin-top: 0;
+	margin-bottom: 150px;
+	text-shadow: #000 1px 1px 10px;
+}
+.section {
+	padding: 50px 0;
+
+}
+
+.section h2,
+.section h3,
+.section h4,
+.section ul {
+	font-weight: bold;
+		text-align: center;
+}
+.section h2 {
+		font:  30px Arial, sans-serif;
+}
+.section h4 {
+	font-weight: normal;
+}
+.controls {
+
+}
+.controls div {
+	width: 300px;
+	height: 500px;
+
+}
+.buttons {
+	margin-left: 20px;
+}
+.buttons li {
+
+	line-height: 116px;
+} 
+.buttons li:before {
+	content:"";
+  	float:left;
+   	width: 114px;
+   	height: 114px;
+   	margin:0 30px 0 0;
+   	background-image: url(../assets/img/keybord2.png);
+
+}
+.buttons li:nth-child(2):before {
+	background-position: -120px;
+}
+.buttons li:nth-child(3):before {
+	background-position: -240px;
+}
+.buttons li:nth-child(4):before {
+	background-position: -360px;
+}
+.controls div {
+	border: 2px solid red;
+	border-radius: 30px;
+}
+div .mause {
+	height: 300px;
+	padding-top: 200px;
+}
+.push {
+
+   	line-height: 140px;
+}
+.push:before {
+	content:"";
+  	float:left;
+	width: 90px; /*эти размеры определяют область, которая будет «вырезана» из спрайта*/
+   	height: 117px;
+	background-image: url(../assets/img/keybord2.png);
+   	background-position: -480px;
+}
+
+
+
+
+.rules {
+	background-color: #f3f3f3;
+	font: 20px Arial, sans-serif;
+}
+.win {
+	margin-bottom: 25px;
+}
+.win, .lose {
+	padding: 30px 0;
+	background-color: #f9f9f9;
+	border: 2px solid red;
+	border-radius: 30px;
+
+}
+.screenshots {
+
+}
+.screen {
+	display: flex;	
+	flex-direction: row;
+	justify-content: space-around;
+	flex-wrap: wrap;
+
+
+}
+.screen div {
+	width: 396px;
+	height: 236px;
+	border-radius: 15px;
+	box-shadow: 4px 10px 30px 8px rgba(0,0,0,0.75);
+}
+.screen1 {
+	background-image: url(../assets/img/screen3.jpg);
+}
+.screen2 {
+	background-image: url(../assets/img/screen4.jpg);
+}
+.developer {
+	background-color: #f3f3f3;
+}
+.developer li{
+	font: 20px Arial, sans-serif;
+	margin-bottom: 10px;
+}
+.developer li:last-child {
+	margin-bottom: 0;	
+}
+.photo {
+	width: 200px;
+	height: 200px;
+	margin: 0 auto;
+	background-image: url(../assets/img/developer.jpg); 
+	background-repeat: no-repeat;
+	background-size: contain;
+	border-radius: 50%;
+}
+.link a{
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	background-image: url(../assets/img/github-logo.png); 
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+.link a:hover {
+
+	background-image: url(../assets/img/github-logo2.png);
+	background-color: #000;	
+	border-radius: 15px;
+}
+.footer {
+	height: 70px;
+	background-color: rgba(70, 70, 70, 1);
+}
+.footer h4 {
+	padding-top: 25px;
+	color: #FFF;
+}
