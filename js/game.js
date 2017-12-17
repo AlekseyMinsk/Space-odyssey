@@ -6,6 +6,7 @@
     let bulletTime = 0;
     let fireButton;
     let fx;
+    let fxFire;
     let alien;
     let createAlienTimer = 0;
     let inTheWorld;
@@ -38,8 +39,14 @@
     let engineExhaust;
     let countOfAnimationDown = 0;
     let countOfAnimationUp = 0;
-
-var Game = 
+    let weaponUp;
+    let weaponType;
+    let weaponCheck = true;
+    let weaponTimer = 0;
+    let weapon1 = false;
+    let weapon2 = false;
+    let weapon3 = false;
+ var Game = 
 {
     preload: function() {
         game.load.image('gameField', 'assets/img/remember-me2.jpg');
@@ -47,9 +54,11 @@ var Game =
         game.load.spritesheet('engineExhaust', 'assets/img/engineExhaust2.png', 50, 50);
         game.load.image('bullet', 'assets/img/bullet.png');
         game.load.audio('sfx', 'assets/audio/fx_mixdown.ogg');
+        game.load.audio('laserfire', 'assets/audio/laserfire.ogg');
         game.load.image('enemyBullet', 'assets/img/enemy-bullet.png');
-        game.load.image('heart', 'assets/img/heart.png');
-        game.load.image('firstAidAid', 'assets/img/firstaid.png');
+        game.load.image('heart', 'assets/img/heart2.png');
+        game.load.image('firstAidAid', 'assets/img/firstAid.png');
+        game.load.image('weaponUp', 'assets/img/weaponUp.png');
         game.load.spritesheet('invader', 'assets/img/1.png', 39, 46);
         game.load.spritesheet('kaboom', 'assets/img/explode.png', 128, 128);
         game.load.spritesheet('helth', 'assets/img/Untitled-2.png', 34, 6);
@@ -73,7 +82,8 @@ var Game =
 
         this.createAlienGroup();
 
-        this.createGroupFirstAid();         
+        this.createGroupFirstAid(); 
+        this.createGroupWeaponUp();        
 
         cursors = game.input.keyboard.createCursorKeys();
         fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -104,6 +114,11 @@ var Game =
         fx.addMarker('death', 12, 2);
         fx.addMarker('ping', 10, 0.4);
 
+        fxFire = game.add.audio('laserfire');
+        fxFire.allowMultiple = true;
+        fxFire.addMarker('shot', 0, 0.5);
+
+
         canvas = document.getElementsByTagName('canvas')[0];
         startGameTime = game.time.now;
     },
@@ -116,11 +131,6 @@ var Game =
         enemyBullets.setAll('anchor.y', 1);
         enemyBullets.setAll('outOfBoundsKill', true);
         enemyBullets.setAll('checkWorldBounds', true);
-    },
-    createGroupFirstAid: function() {
-        aid = game.add.group();
-        aid.enableBody = true;
-        aid.physicsBodyType = Phaser.Physics.ARCADE;   
     },
     createButtonGroup: function() {
         buttonGroup = game.add.group();
@@ -135,7 +145,9 @@ var Game =
         helth.physicsBodyType = Phaser.Physics.ARCADE; 
     },
     createPlayer: function() {
-        player = game.add.sprite(60, game.world.height - 150, 'dude');
+        player = game.add.sprite(160, game.world.height - 150, 'dude');
+        player.anchor.x = 0.5;
+        player.anchor.y = 0.5;
         game.camera.follow(player);
         player.animations.add('up', [4, 3, 2, 1, 0], 50);
         player.animations.add('down', [6, 7, 8, ,9, 10], 50);
@@ -144,12 +156,15 @@ var Game =
         game.physics.arcade.enable(player);
         player.body.bounce.y = 0.2;
         player.body.collideWorldBounds = true;
-        engineExhaust = game.add.sprite(17, game.world.height - 140, 'engineExhaust');
+        engineExhaust = game.add.sprite(40, game.world.height - 174, 'engineExhaust');
         // engineExhaust.angle = 90;
         engineExhaust.animations.add('fire', [0,1,2,3,4,5,6,7], 20, true);
         engineExhaust.play('fire');
         game.physics.arcade.enable(engineExhaust);
         engineExhaust.body.collideWorldBounds = true;
+        weapon1 = true;
+        weapon2 = false;
+        weapon3 = false;
          //engineExhaust.events.onOutOfBounds.add(this.stopEngineExhaust, this );
 
 
@@ -158,15 +173,22 @@ var Game =
         if (cursors.left.isDown)
         {
             player.body.velocity.x = 0;
-          //  engineExhaust.body.velocity.x = -240;
         }
-
-       //  player.body.velocity.x = 0;
-        // player.body.velocity.y = 0;
     },
     createLives: function(n) {
         player.heart = lives.create(140 + (50 * n), 270, 'heart');
         player.heart.anchor.setTo(0.5, 0.5);
+        player.heart.alpha = 0.7;
+    },
+
+
+
+
+
+    createGroupFirstAid: function() {
+        aid = game.add.group();
+        aid.enableBody = true;
+        aid.physicsBodyType = Phaser.Physics.ARCADE;   
     },
     createFirstAid: function() {
         let createCordinateForAid = game.rnd.between(50, 550);
@@ -178,6 +200,54 @@ var Game =
         aid.y = 200;
         aidTimer =  game.time.now + 10000;
     },
+    createGroupWeaponUp: function() {
+        weaponUp = game.add.group();
+        weaponUp.enableBody = true;
+        weaponUp.physicsBodyType = Phaser.Physics.ARCADE;   
+    },
+    createWeaponUp: function() {
+        let createCordinate = game.rnd.between(50, 550);
+        let speed = game.rnd.between(-40, -120);
+        weaponType = weaponUp.create(0, createCordinate, 'weaponUp');
+        weaponType.body.velocity.x = speed;
+        weaponType.checkWorldBounds = true;
+        weaponUp.x = 1000;
+        weaponUp.y = 200;
+        weaponTimer =  game.time.now + 20000;
+    },
+    upgreatWeapon: function() {
+        if(weapon1 === true) {
+            weapon1 = false;
+            weapon2 = true;
+        } else if (weapon2 === true) {
+            weapon2 = false;
+            weapon3 = true;
+            weaponCheck = false;
+        }
+        weaponType.kill();
+
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     createAliens: function(speedAppearAliens) {
         let createCordinate = game.rnd.between(50, 550);
         alien = aliens.create(0, createCordinate, 'invader');
@@ -218,7 +288,6 @@ var Game =
         {
             player.body.velocity.x = -240;
             engineExhaust.body.velocity.x = -240;
-           //  console.log(engineExhaust.position.x);
         }
         if (cursors.right.isDown)
         {
@@ -230,9 +299,7 @@ var Game =
         {
             player.body.velocity.y = -240;
             engineExhaust.body.velocity.y = -240;
-             this.animationUp();
-             console.log(engineExhaust.position.y);
-            
+             this.animationUp();        
         } 
         if (cursors.down.isDown && engineExhaust.position.y < 728)
         {
@@ -247,9 +314,25 @@ var Game =
         if(cursors.up.isUp) countOfAnimationUp = 0;
     
 
-        if (fireButton.isDown && checkPlayerAlive === true) 
+        /* if (fireButton.isDown && checkPlayerAlive === true) 
         {
             this.fireBullet();
+        } */ 
+        if (fireButton.isDown && checkPlayerAlive === true && weapon1 ===  true) {
+            this.createFireBullet(400, 0, fx,1);
+
+        }
+        if (fireButton.isDown && checkPlayerAlive === true && weapon2 ===  true) {
+            this.createFireBullet(400, 0, fx);
+            this.createFireBullet(400, 100, fx);
+            this.createFireBullet(400, -100, fx, 1);
+        }
+        if (fireButton.isDown && checkPlayerAlive === true && weapon3 ===  true) {
+            this.createFireBullet(400, 0, fxFire);
+            this.createFireBullet(400, 100, fxFire);
+            this.createFireBullet(400, -100, fxFire);
+            this.createFireBullet(400, 200, fxFire);
+            this.createFireBullet(400, -200, fxFire, 1);
         }
 
         if(startGameTime + 1000 < game.time.now && startGameTime + 20000 > game.time.now) {
@@ -280,6 +363,9 @@ var Game =
         if(game.time.now > aidTimer) {
             this.createFirstAid();
         }
+        if(game.time.now > weaponTimer && weaponCheck === true) {
+            this.createWeaponUp();
+        }
 
         if(numberOfLives < 3) {
             game.physics.arcade.overlap(player, aid, this.addLives, null, this);
@@ -301,6 +387,8 @@ var Game =
         game.physics.arcade.overlap(bullets, aliens, this.collisionHandler, null, this);
     	game.physics.arcade.overlap(player, aliens, this.collisionPlayer, null, this);
     	game.physics.arcade.overlap(enemyBullets, player, this.enemyHitsPlayer, null, this);
+        game.physics.arcade.overlap(weaponUp, player, this.upgreatWeapon, null, this);
+
         // game.physics.arcade.overlap(engineExhaust, player, this.stopEngineExhaust, null, this);
     },
     animationUp: function() {
@@ -374,73 +462,23 @@ var Game =
             fx.play('death');
         } 
     },
-    fireBullet: function() {
-    	// Number of blocks will be optimized	
-        //  To avoid them being allowed to fire too fast we set a time limit
-        if (game.time.now > bulletTime)
-        {
-            //  Grab the first bullet we can from the pool
+    createFireBullet: function(x,y,sound,j) {
+          if (game.time.now > bulletTime) {
+            sound.play('shot');
             bullet = bullets.getFirstExists(false);
             if (bullet)
             {
-                //  And fire it
-                fx.play("shot");
-                bullet.reset(player.x + 50, player.y + 20);
-                bullet.body.velocity.x = 400;
-                bulletTime = game.time.now + 450;
+                bullet.reset(player.x, player.y);
+                bullet.body.velocity.x = x;
+                bullet.body.velocity.y = y;
                 bullet.checkWorldBounds = true;
                 bullet.events.onOutOfBounds.add(this.goodbyeBullet, this );
+                console.log(y);
             }
-
-            bullet = bullets.getFirstExists(false);
-            if (bullet)
-            {
-                //  And fire it
-                fx.play("shot");
-                bullet.reset(player.x + 50, player.y + 20);
-                bullet.body.velocity.x = 400;
-                bullet.body.velocity.y = 200;
+            if(j)
+                // sound.play('shot');
                 bulletTime = game.time.now + 450;
-                bullet.checkWorldBounds = true;
-                bullet.events.onOutOfBounds.add(this.goodbyeBullet, this );
-            }
-            bullet = bullets.getFirstExists(false);
-            if (bullet)
-            {
-                //  And fire it
-                fx.play("shot");
-                bullet.reset(player.x + 50, player.y + 20);
-                bullet.body.velocity.x = 400;
-                bullet.body.velocity.y = -200;
-                bulletTime = game.time.now + 450;
-                bullet.checkWorldBounds = true;
-                bullet.events.onOutOfBounds.add(this.goodbyeBullet, this ); 
-            }
-             bullet = bullets.getFirstExists(false);
-            if (bullet)
-            {
-                //  And fire it
-                fx.play("shot");
-                bullet.reset(player.x + 50, player.y + 20);
-                bullet.body.velocity.x = 400;
-                bullet.body.velocity.y = 100;
-                bulletTime = game.time.now + 450;
-                bullet.checkWorldBounds = true;
-                bullet.events.onOutOfBounds.add(this.goodbyeBullet, this );
-            }
-             bullet = bullets.getFirstExists(false);
-            if (bullet)
-            {
-                //  And fire it
-                fx.play("shot");
-                bullet.reset(player.x + 50, player.y + 20);
-                bullet.body.velocity.x = 400;
-                bullet.body.velocity.y = -100;
-                bulletTime = game.time.now + 450;
-                bullet.checkWorldBounds = true;
-                bullet.events.onOutOfBounds.add(this.goodbyeBullet, this );
-            }
-        }
+          }  
     },
     enemyFires: function() { 
         //  Grab the first bullet we can from the pool
@@ -465,7 +503,7 @@ var Game =
            // enemyBullet.events.onOutOfBounds.add(this.goodbyeEnemyBullet, this);
 
             game.physics.arcade.moveToObject(enemyBullet,player,120);
-            firingTimer = game.time.now + 1000;
+            firingTimer = game.time.now + 2000;
             if (enemyBullet.position.x === 0) {
                 enemyBullet.kill();
             }
@@ -484,7 +522,7 @@ var Game =
         fx.play('death');
         //  number of explosion blocks will be optimized
         var explosion = explosions.getFirstExists(false);
-        explosion.reset(player.body.x, player.body.y);
+        explosion.reset(player.x, player.y);
         explosion.play('kaboom', 30, false, true);
         if (lives.countLiving()  === 0) {
             player.kill();
@@ -497,6 +535,7 @@ var Game =
     restart: function() {
         score = 0;
         aid.kill();
+        weaponUp.kill();
         helth.kill();
         enemyBullets.kill();
         buttonGroup.kill();
@@ -504,7 +543,9 @@ var Game =
         aliens.kill();
         engineExhaust.kill();
         checkPlayerAlive = true;
+        weaponCheck = true;
         this.createGroupFirstAid();
+        this.createGroupWeaponUp();
         this.createPlayer();
         this.createAlienGroup();
         this.createEnemyBulletsGroup();
