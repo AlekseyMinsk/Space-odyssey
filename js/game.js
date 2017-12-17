@@ -57,7 +57,7 @@
         game.load.audio('laserfire', 'assets/audio/laserfire.ogg');
         game.load.image('enemyBullet', 'assets/img/enemy-bullet.png');
         game.load.image('heart', 'assets/img/heart2.png');
-        game.load.image('firstAidAid', 'assets/img/firstAid.png');
+        game.load.image('firstAidAid', 'assets/img/firstAid2.png');
         game.load.image('weaponUp', 'assets/img/weaponUp.png');
         game.load.spritesheet('invader', 'assets/img/1.png', 39, 46);
         game.load.spritesheet('kaboom', 'assets/img/explode.png', 128, 128);
