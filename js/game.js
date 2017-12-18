@@ -57,7 +57,7 @@
         game.load.audio('laserfire', 'assets/audio/laserfire.ogg');
         game.load.image('enemyBullet', 'assets/img/enemy-bullet.png');
         game.load.image('heart', 'assets/img/heart2.png');
-        game.load.image('firstAidAid', 'assets/img/firstAid2.png');
+        game.load.image('firstAidAid', 'assets/img/firstAid.png');
         game.load.image('weaponUp', 'assets/img/weaponUp.png');
         game.load.spritesheet('invader', 'assets/img/1.png', 39, 46);
         game.load.spritesheet('kaboom', 'assets/img/explode.png', 128, 128);
@@ -166,8 +166,6 @@
         weapon2 = false;
         weapon3 = false;
          //engineExhaust.events.onOutOfBounds.add(this.stopEngineExhaust, this );
-
-
     },
     stopEngineExhaust: function() {
         if (cursors.left.isDown)
@@ -180,11 +178,6 @@
         player.heart.anchor.setTo(0.5, 0.5);
         player.heart.alpha = 0.7;
     },
-
-
-
-
-
     createGroupFirstAid: function() {
         aid = game.add.group();
         aid.enableBody = true;
@@ -225,29 +218,7 @@
             weaponCheck = false;
         }
         weaponType.kill();
-
-    },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+     },
     createAliens: function(speedAppearAliens) {
         let createCordinate = game.rnd.between(50, 550);
         alien = aliens.create(0, createCordinate, 'invader');
@@ -473,7 +444,6 @@
                 bullet.body.velocity.y = y;
                 bullet.checkWorldBounds = true;
                 bullet.events.onOutOfBounds.add(this.goodbyeBullet, this );
-                console.log(y);
             }
             if(j)
                 // sound.play('shot');
