@@ -21,8 +21,8 @@
     let lives;
     let alienLives;
     let x = 0;
-    let helth;
-    let helthAlien;
+    let health;
+    let healthAlien;
     let gameTime = 0; 
     let aidTimer = 0;
     let firstAid;
@@ -46,6 +46,7 @@
     let weapon1 = false;
     let weapon2 = false;
     let weapon3 = false;
+
  var Game = 
 {
     preload: function() {
@@ -61,7 +62,7 @@
         game.load.image('weaponUp', 'assets/img/weaponUp.png');
         game.load.spritesheet('invader', 'assets/img/1.png', 39, 46);
         game.load.spritesheet('kaboom', 'assets/img/explode.png', 128, 128);
-        game.load.spritesheet('helth', 'assets/img/Untitled-2.png', 34, 6);
+        game.load.spritesheet('health', 'assets/img/Untitled-2.png', 34, 6);
         game.load.spritesheet('button', 'assets/img/flixel-button.png', 80, 20);
         game.load.bitmapFont('nokia', 'assets/fonts/nokia16black.png', 'assets/fonts/nokia16black.xml');
     },
@@ -87,6 +88,8 @@
 
         cursors = game.input.keyboard.createCursorKeys();
         fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        p = game.input.keyboard.addKeys(Phaser.Keyboard.P);
+
       
         bullets = game.add.group();
         bullets.enableBody = true;
@@ -140,9 +143,9 @@
         aliens = game.add.group();
         aliens.enableBody = true;
         aliens.physicsBodyType = Phaser.Physics.ARCADE;
-        helth = game.add.group();
-        helth.enableBody = true;
-        helth.physicsBodyType = Phaser.Physics.ARCADE; 
+        health = game.add.group();
+        health.enableBody = true;
+        health.physicsBodyType = Phaser.Physics.ARCADE; 
     },
     createPlayer: function() {
         player = game.add.sprite(160, game.world.height - 150, 'dude');
@@ -212,10 +215,12 @@
         if(weapon1 === true) {
             weapon1 = false;
             weapon2 = true;
+            fx.play('ping');
         } else if (weapon2 === true) {
             weapon2 = false;
             weapon3 = true;
             weaponCheck = false;
+            fx.play('ping');
         }
         weaponType.kill();
      },
@@ -230,16 +235,16 @@
         alien.body.collideWorldBounds = false;
         alien.checkWorldBounds = true;
         alien.events.onOutOfBounds.add(this.goodbyeAlien, this );
-        alien.helthAlien = helth.create(-11, createCordinate - 40, 'helth');
-        alien.helthAlien.animations.add('flyHelth', [ 0, 1, 2,], 1, true);
-        alien.helthAlien.frame = 2;
-        alien.helthAlien.body.velocity.x = speed;
+        alien.healthAlien = health.create(-11, createCordinate - 40, 'health');
+        alien.healthAlien.animations.add('flyHelth', [ 0, 1, 2,], 1, true);
+        alien.healthAlien.frame = 2;
+        alien.healthAlien.body.velocity.x = speed;
         alien.aLives = game.add.group();
-        for (var j = 0; j < 3; j++) {
+        for (var j = 0; j < 2; j++) {
             alien.aLives.create();
         }   
-        helth.x = 1000;
-        helth.y = 200;
+        health.x = 1000;
+        health.y = 200;
         aliens.x = 1000;
         aliens.y = 200;
         createAlienTimer = game.time.now + speedAppearAliens;
@@ -250,7 +255,7 @@
         invader.animations.add('kaboom');
     },
     update: function() {
-    	gameField.tilePosition.x += -2;
+    	gameField.tilePosition.x += -1;
         player.body.velocity.x = 0;
         player.body.velocity.y = 0;
         engineExhaust.body.velocity.x = 0;
@@ -266,11 +271,12 @@
             engineExhaust.body.velocity.x = 240;
 
         }
+
         if (cursors.up.isDown && engineExhaust.position.y > 218)
         {
             player.body.velocity.y = -240;
             engineExhaust.body.velocity.y = -240;
-             this.animationUp();        
+            this.animationUp();        
         } 
         if (cursors.down.isDown && engineExhaust.position.y < 728)
         {
@@ -278,17 +284,13 @@
             engineExhaust.body.velocity.y = 240;
             this.animationDown();
          }
-        if(cursors.down.isUp && cursors.up.isUp && cursors.right.isUp && cursors.left.isUp){
-        	player.animations.play('move');
-        }
         if(cursors.down.isUp) countOfAnimationDown = 0;
         if(cursors.up.isUp) countOfAnimationUp = 0;
-    
 
-        /* if (fireButton.isDown && checkPlayerAlive === true) 
-        {
-            this.fireBullet();
-        } */ 
+        if(cursors.down.isUp && cursors.up.isUp && cursors.right.isUp && cursors.left.isUp){
+            player.animations.play('move');
+        }
+
         if (fireButton.isDown && checkPlayerAlive === true && weapon1 ===  true) {
             this.createFireBullet(400, 0, fx,1);
 
@@ -331,10 +333,10 @@
         {
             this.enemyFires();
         }
-        if(game.time.now > aidTimer) {
+        if(game.time.now > aidTimer + 5000) {
             this.createFirstAid();
         }
-        if(game.time.now > weaponTimer && weaponCheck === true) {
+        if(game.time.now > weaponTimer + 9000 && weaponCheck === true) {
             this.createWeaponUp();
         }
 
@@ -355,6 +357,7 @@
             this.createButtonGroup();
             this.createEndGameMenu('You win!');
         }
+
         game.physics.arcade.overlap(bullets, aliens, this.collisionHandler, null, this);
     	game.physics.arcade.overlap(player, aliens, this.collisionPlayer, null, this);
     	game.physics.arcade.overlap(enemyBullets, player, this.enemyHitsPlayer, null, this);
@@ -403,7 +406,7 @@
     	player.kill();
         engineExhaust.kill();
         alien.kill();
-        alien.helthAlien.kill();
+        alien.healthAlien.kill();
         fx.play('death');
         this.createEndGameMenu('Game over!');
         checkPlayerAlive = false;
@@ -421,14 +424,13 @@
     	if (liveAlien)
         {
             liveAlien.kill();
-            alien.helthAlien.frame -= 1;
+            alien.healthAlien.frame -= 1;
             alien.body.velocity.x += 10;
-            alien.helthAlien.body.velocity.x += 10;
-        }
-       if(alien.aLives.countLiving() < 1) {
+            alien.healthAlien.body.velocity.x += 10;
+        } else {
             score += 20;
             scoreText.text = scoreString + score;
-       		alien.helthAlien.kill();
+       		alien.healthAlien.kill();
        	    alien.kill();
             fx.play('death');
         } 
@@ -474,6 +476,7 @@
 
             game.physics.arcade.moveToObject(enemyBullet,player,120);
             firingTimer = game.time.now + 2000;
+
             if (enemyBullet.position.x === 0) {
                 enemyBullet.kill();
             }
@@ -506,7 +509,7 @@
         score = 0;
         aid.kill();
         weaponUp.kill();
-        helth.kill();
+        health.kill();
         enemyBullets.kill();
         buttonGroup.kill();
         textGroup.kill();
@@ -519,6 +522,8 @@
         this.createPlayer();
         this.createAlienGroup();
         this.createEnemyBulletsGroup();
+        aidTimer =  game.time.now;
+        weaponTimer =  game.time.now;
         startGameTime = game.time.now;
         stateText.visible = false;
         lives.kill();

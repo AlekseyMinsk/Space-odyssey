@@ -1,8 +1,8 @@
  
-const STARTPAGE = document.getElementById('start');
+const STARTGAME = document.getElementById('start');
 const LANDING = document.getElementById('landing'); 
 let isItFirstEnter = true;
-STARTPAGE.addEventListener( 'click' , startGame );
+STARTGAME.addEventListener( 'click' , startGame );
 let game;
 
 function startGame() {
@@ -11,7 +11,8 @@ function startGame() {
 		game = new Phaser.Game(1000, 600, Phaser.AUTO, '');
 		game.state.add('Game', Game);
 		game.state.start('Game');
-	} else {
+
+		} else {
 		game.paused = false;
 		canvas.classList.remove('hide');
 		startGameTime = game.time.now;

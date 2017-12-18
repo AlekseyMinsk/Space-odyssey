@@ -1,6 +1,9 @@
 body {
 	margin: 0;
 	padding: 0;
+	background: #222 url(../assets/img/starsSpace3.jpg) no-repeat center bottom;
+	-webkit-background-size: cover;
+	height: 100vh;
 }
 ul, li {
 	margin: 0;
@@ -19,6 +22,8 @@ canvas {
 	width: 1000px;
 	margin: 0 auto;
 	margin-top: 50px;
+	box-shadow: 3px 10px 23px 2px rgba(0,0,0,0.75);
+
 }
 .container {
  	width: 970px;
@@ -176,10 +181,6 @@ div .mause {
 	background-image: url(../assets/img/keybord2.png);
    	background-position: -480px;
 }
-
-
-
-
 .rules {
 	background-color: #f3f3f3;
 	font: 20px Arial, sans-serif;
@@ -194,8 +195,9 @@ div .mause {
 	border-radius: 30px;
 
 }
-.screenshots {
-
+.screenshots,
+.controls {
+	background-color: #FFF;
 }
 .screen {
 	display: flex;	
